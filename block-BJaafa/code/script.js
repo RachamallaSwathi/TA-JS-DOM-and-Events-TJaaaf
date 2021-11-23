@@ -1,58 +1,33 @@
-function main() {
+const colorBtn = document.querySelector('#btn-1')
+const boxes = document.querySelectorAll('.box')
 
-    let movie = document.querySelector('form');
-    let input = document.querySelector('input');
-    let connector = document.querySelector('.connector');
+let running =  false
 
-    let movieList = "";
-    let div = document.createElement('div');
-    div.classList.add('list');
-
-    function movieListHandler(event) {
-
-        event.preventDefault();
-        movieList = event.target.elements.movie.value;
-
-        if (movieList.length !== 0) {
-            input.value = "";
-
-
-
-            let eachDiv = document.createElement('div');
-            let li = document.createElement('input');
-            let label = document.createElement('label');
-            let close = document.createElement('button');
-            close.classList.add('close');
-            close.innerText = '❌';
-            eachDiv.append(li, label, close);
-            eachDiv.classList.add('movieBox');
-            li.setAttribute('type', 'checkbox');
-            li.classList.add('listElement');
-            label.innerText = movieList;
-
-
-            div.append(eachDiv);
-            connector.append(div);
-
-            let closebtn = document.querySelectorAll('.close');
-
-            function closebtnHandler(event) {
-                let cls = event.target.className;
-                let state = event.target.parentElement.firstElementChild.checked;
-                if (state === true && cls === 'close') {
-                    event.target.parentElement.remove();
-                } else {
-
-                }
-                console.log(cls, state)
-            }
-
-
-            closebtn.forEach(n => addEventListener('click', closebtnHandler))
-
-        }
+function getRandomColor() {
+    let letters = "0123456789ABCDEF"
+    let color = '#'
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)]
     }
-    movie.addEventListener('submit', movieListHandler);
-
+    return color
 }
-main();
+
+function start() {
+    if(running) {
+        boxes.forEach(color => {
+            color.style.background = getRandomColor()
+        
+        })
+        setTimeout(start, 500)
+    }
+}
+colorBtn.addEventListener('click', function() {
+    colorBtn.innerText = "STOP"
+    if(running) {
+        running = false
+        colorBtn.innerText = 'CHANGE COLOR'
+    } else {
+        running = true
+        start()
+    }
+})
